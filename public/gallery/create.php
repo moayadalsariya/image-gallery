@@ -1,6 +1,6 @@
 <?php require_once "../../views/paritals/header.php"; ?>
-
 <?php
+session_start();
 /** @var \PDO */
 require_once "../../database.php";
 require_once "../../utils/functions.php";
@@ -52,9 +52,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $statment->bindValue(':desc', $desc);
         $statment->bindValue(':image', $image);
         $statment->execute();
+        $_SESSION['success'] = "you have successful create new post";
         header("Location: ./index.php");
         exit();
     }
+    
 }
 ?>
 

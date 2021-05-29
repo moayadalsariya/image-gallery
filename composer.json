@@ -1,0 +1,14 @@
+{
+    "name": "moayad/image-gallery",
+    "license": "MIT",
+    "authors": [{
+        "name": "moayad alsariya",
+        "email": "moayad.alsariya@gmail.com"
+    }],
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "app\\": "./"
+        }
+    }
+}

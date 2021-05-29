@@ -3,6 +3,13 @@
 <?php
 /** @var \PDO */
 require_once "../../database.php";
+session_start();
+setcookie("key", "value", time() + (60 * 60 * 24 * 30), "/", NULL);
+if (isset($_SESSION['success'])) {
+  $sucess = $_SESSION['success'];
+  session_unset();
+  session_destroy();
+}
 
 $statment = $pdo->prepare("SELECT * FROM gallery;");
 $statment->execute();
@@ -12,7 +19,7 @@ if (isset($_GET['q'])) {
   $q = htmlspecialchars($_GET["q"], ENT_QUOTES, "utf-8");
 
   $statment = $pdo->prepare("SELECT * FROM gallery WHERE title LIKE :title ORDER BY created_date;");
-  $statment->bindValue(':title',"%$q%");
+  $statment->bindValue(':title', "%$q%");
   $statment->execute();
   $prodcut = $statment->fetchAll(PDO::FETCH_ASSOC);
 }
@@ -21,6 +28,12 @@ if (isset($_GET['q'])) {
 <main>
 
   <section class="py-5 text-center container">
+    <?php if (isset($sucess)) {  ?>
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+      <?php echo $sucess; ?>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    <?php  }  ?>
     <div class="row py-lg-5">
       <div class="col-lg-6 col-md-8 mx-auto">
         <h1 class="fw-light">Image Gallery CRUD</h1>
@@ -36,7 +49,9 @@ if (isset($_GET['q'])) {
     <div class="container">
       <form action="" method="get">
         <div class="input-group mb-3 w-50 mx-auto">
-          <input type="text" value="<?php if(isset($q)){echo $q;} ?>" name='q' class="form-control" placeholder="Search for image" aria-label="Username" aria-describedby="basic-addon1">
+          <input type="text" value="<?php if (isset($q)) {
+                                      echo $q;
+                                    } ?>" name='q' class="form-control" placeholder="Search for image" aria-label="Username" aria-describedby="basic-addon1">
           <button class="btn-primary">Search</button>
         </div>
       </form>
